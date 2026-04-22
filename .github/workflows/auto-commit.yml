@@ -1,0 +1,58 @@
+name: Auto Commit
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '30 0 22 4 *'
+    - cron: '58 12 22 4 *'
+    - cron: '46 0 23 4 *'
+    - cron: '9 0 24 4 *'
+    - cron: '4 9 24 4 *'
+    - cron: '58 16 24 4 *'
+    - cron: '50 0 25 4 *'
+    - cron: '41 13 25 4 *'
+    - cron: '44 0 26 4 *'
+    - cron: '6 1 27 4 *'
+    - cron: '28 13 27 4 *'
+    - cron: '2 0 28 4 *'
+    - cron: '42 13 28 4 *'
+    - cron: '42 1 29 4 *'
+    - cron: '15 9 29 4 *'
+    - cron: '18 17 29 4 *'
+    - cron: '4 0 30 4 *'
+    - cron: '42 8 30 4 *'
+    - cron: '59 17 30 4 *'
+    - cron: '7 0 1 5 *'
+    - cron: '1 12 1 5 *'
+    - cron: '32 1 2 5 *'
+    - cron: '38 0 3 5 *'
+    - cron: '2 12 3 5 *'
+    - cron: '50 1 4 5 *'
+    - cron: '49 12 4 5 *'
+    - cron: '56 1 5 5 *'
+    - cron: '4 12 5 5 *'
+
+jobs:
+  auto-commit:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          persist-credentials: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+      - name: Set Git Identity
+        run: |
+          git config --global user.name "akhilmishra542"
+          git config --global user.email "akhilmishra542@users.noreply.github.com"
+
+      - name: Create Single Change
+        run: |
+          node ./auto_commit_script.js
+          git add .
+          git commit -m "Auto commit [$(date -u)]"
+          git push
